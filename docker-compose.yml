@@ -1,13 +1,13 @@
 services:
   postgres:
-    container_name: back-pp
+    container_name: pi
     image: postgres
     ports:
       - 5432:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: kamikaze
-      POSTGRES_DB: backpp
+      POSTGRES_DB: pi
       PGDATA: /data/postgres
     volumes:
       - ./data/pg:/data/postgres
