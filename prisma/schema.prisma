@@ -16,7 +16,7 @@ model User {
 
   ratings Rating[]
 
-  @@map("users")
+  @@map("user")
 }
 
 model Game {
@@ -27,7 +27,7 @@ model Game {
 
   ratings Rating[]
 
-  @@map("games")
+  @@map("game")
 }
 
 model Rating {
@@ -36,10 +36,24 @@ model Rating {
   createdAt   DateTime @default(now()) @map("created_at")
   rate        Int
 
-  user     User   @relation(fields: [authorId], references: [id])
-  game     Game   @relation(fields: [gameId], references: [id])
-  authorId String @map("author_id")
+  user     User      @relation(fields: [authorId], references: [id])
+  authorId String    @map("author_id")
+  
+  game     Game      @relation(fields: [gameId], references: [id])
   gameId   String
 
-  @@map("ratings")
+  comments  Comment[]
+
+  @@map("rating")
+}
+
+model Comment {
+  id       String @id @default(uuid())
+  content  String
+  rate     Int?
+
+  rating   Rating @relation(fields: [ratingId], references: [id])
+  ratingId String
+
+  @@map("comment")
 }
