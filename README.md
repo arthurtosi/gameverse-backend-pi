@@ -1,4 +1,4 @@
-# backend-pp-2025-1
+# backend-PI
 Esse repositório representa o back-end de projeto integrado, em que fazemos um letterboxd para games com integração com o instagram.<br/>
 ## Tecnologias usadas
 + Prisma.
