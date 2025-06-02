@@ -7,6 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum GameType {
+  RPG
+  ACAO
+  ESPORTE
+  MUNDO_ABERTO
+  SIMULADOR
+  TERROR
+  EDUCATIVO
+  CARTAS
+  TABULEIRO
+  AVENTURA
+}
+
 model User {
   id       String  @id @default(uuid())
   username String  @unique
@@ -24,6 +37,7 @@ model Game {
   name        String
   releaseDate DateTime @map("release_date")
   foto        String
+  category    GameType
 
   ratings Rating[]
 
@@ -36,21 +50,21 @@ model Rating {
   createdAt   DateTime @default(now()) @map("created_at")
   rate        Int
 
-  user     User      @relation(fields: [authorId], references: [id])
-  authorId String    @map("author_id")
-  
-  game     Game      @relation(fields: [gameId], references: [id])
-  gameId   String
+  user     User   @relation(fields: [authorId], references: [id])
+  authorId String @map("author_id")
 
-  comments  Comment[]
+  game   Game   @relation(fields: [gameId], references: [id])
+  gameId String
+
+  comments Comment[]
 
   @@map("rating")
 }
 
 model Comment {
-  id       String @id @default(uuid())
-  content  String
-  rate     Int?
+  id      String @id @default(uuid())
+  content String
+  rate    Int?
 
   rating   Rating @relation(fields: [ratingId], references: [id])
   ratingId String
