@@ -13,18 +13,33 @@ model User {
   email    String  @unique
   password String
   foto     String?
-  posts    Post[]
+
+  ratings Rating[]
 
   @@map("users")
 }
 
-model Post {
+model Game {
   id          String   @id @default(uuid())
+  name        String
+  releaseDate DateTime @map("release_date")
   foto        String
+
+  ratings Rating[]
+
+  @@map("games")
+}
+
+model Rating {
+  id          String   @id @default(uuid())
   description String?
   createdAt   DateTime @default(now()) @map("created_at")
-  user        User     @relation(fields: [authorId], references: [id])
-  authorId    String   @map("author_id")
+  rate        Int
 
-  @@map("posts")
+  user     User   @relation(fields: [authorId], references: [id])
+  game     Game   @relation(fields: [gameId], references: [id])
+  authorId String @map("author_id")
+  gameId   String
+
+  @@map("ratings")
 }
