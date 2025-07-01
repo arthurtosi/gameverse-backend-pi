@@ -29,7 +29,7 @@ export class CreateAccountController {
     });
 
     if (userWithSameEmail) {
-      throw new ConflictException("User with same e-mail already exists.");
+      throw new ConflictException("Usuário com mesmo email já existe.");
     }
 
     const userWithSameUsername = await this.prisma.user.findUnique({
@@ -39,7 +39,7 @@ export class CreateAccountController {
     });
 
     if (userWithSameUsername) {
-      throw new ConflictException("User with same username already exists.");
+      throw new ConflictException("Usuário com mesmo username já existe.");
     }
 
     const hashedPassword = await hash(password, 8);

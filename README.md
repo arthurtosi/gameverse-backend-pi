@@ -1,5 +1,6 @@
 # backend-PI
 Esse repositório representa o back-end de projeto integrado, em que fazemos um letterboxd para games com integração com o instagram.<br/>
+Esse repositório roda na porta 8080.
 ## Tecnologias usadas
 + Prisma.
 + Prisma Client.
@@ -17,7 +18,7 @@ npm run dev
 ```
 ## Como parar a aplicação
 + Caso queira parar de fazer o banco rodar: docker-compose stop
-+ Caso queira deletar tudo, inclusive as informações das tabelas: docker-compose down
++ Caso queira deletar tudo, inclusive as informações das tabelas: docker-compose down -v
 ## Observação:
 Criar um .env exatamente igual ao .env.example para conseguir rodar tudo.
 ## Tasks

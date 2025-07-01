@@ -37,13 +37,13 @@ export class AuthenticateController {
     });
 
     if (!user) {
-      throw new UnauthorizedException("User credentials do not match.");
+      throw new UnauthorizedException("Usuário não encontrado.");
     }
 
     const isPasswordValid = await compare(password, user.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException("User credentials do not match.");
+      throw new UnauthorizedException("Credenciais não conferem.");
     }
 
     const token = this.jwt.sign({ sub: user.id }, { expiresIn: "2h" });

@@ -1,13 +1,9 @@
 services:
-  postgres:
-    container_name: projetointegrado
-    image: postgres
+  back-end-pi:
+    image: bitnami/postgresql
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: kamikaze
-      POSTGRES_DB: projetointegrado
-      PGDATA: /data/postgres
-    volumes:
-      - ./data/pg:/data/postgres
+      - POSTGRESQL_USERNAME=kamikaze
+      - POSTGRESQL_PASSWORD=kamikaze
+      - POSTGRESQL_DATABASE=backpi
