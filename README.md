@@ -14,7 +14,7 @@ Esse repositório roda na porta 8080.
 npm i
 docker-compose up -d
 npx prisma migrate dev
-npm run dev
+npm run start:dev
 ```
 ## Como parar a aplicação
 + Caso queira parar de fazer o banco rodar: docker-compose stop
@@ -24,9 +24,4 @@ Criar um .env exatamente igual ao .env.example para conseguir rodar tudo.
 ## Tasks
 1. [x] login(email, senha) gerando token jwt em um cookie<br>
 2. [x] cadastrar(email único, username único, senha) - senha deve ser encriptada, email e username nao podem ja existir.<br>
-3. [ ] a
-4. [ ] b
-5. [ ] c
-6. [ ] d
-7. [ ] e
-8. [ ] f
+3. [x] minhas informações, retorna informação do usuário logado a partir do jwt.<br>

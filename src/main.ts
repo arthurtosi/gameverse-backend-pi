@@ -11,6 +11,11 @@ async function bootstrap() {
 
   const configService: ConfigService<Env, true> = app.get(ConfigService);
 
+  app.enableCors({
+    origin: "*",
+    credentials: true,
+  });
+
   const swaggerConfig = new DocumentBuilder()
     .setTitle("API - GameVerse")
     .setDescription("Documentação da API")
