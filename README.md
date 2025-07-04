@@ -45,3 +45,7 @@ Criar um .env exatamente igual ao .env.example para conseguir rodar tudo.
 1. [x] login(email, senha) gerando token jwt em um cookie<br>
 2. [x] cadastrar(email único, username único, senha) - senha deve ser encriptada, email e username nao podem ja existir.<br>
 3. [x] minhas informações, retorna informação do usuário logado a partir do jwt.<br>
+## Colaboradores
+1. Arthur Tosi
+2. Pedro Sodré Malini
+3. Theo Matheo
