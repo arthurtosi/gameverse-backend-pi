@@ -25,13 +25,10 @@ beforeAll(() => {
 
   process.env.DATABASE_URL = databaseURL;
 
-  console.log(`Criando banco de dados isolado no schema ${databaseURL}`);
-
   execSync("npx prisma migrate deploy");
 });
 
 afterAll(async () => {
-  console.log(`Destruindo banco de dados teste no id ${schemaId}`);
   await prisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schemaId}" CASCADE`);
   await prisma.$disconnect();
 });
