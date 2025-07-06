@@ -41,8 +41,6 @@ export class MeController {
       throw new NotFoundException("Usuário não encontrado.");
     }
 
-    return {
-      user,
-    };
+    return user;
   }
 }
