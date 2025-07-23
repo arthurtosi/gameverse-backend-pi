@@ -1,8 +1,8 @@
 import { Get, Controller, UseGuards, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
-import { JwtAuthGuard } from "../auth/jwt-auth.guard";
-import { CurrentUser } from "../auth/current-user-decorator";
-import { UserPayload } from "../auth/jwt.strategy";
+import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
+import { CurrentUser } from "../../auth/current-user-decorator";
+import { UserPayload } from "../../auth/jwt.strategy";
 import {
   ApiBearerAuth,
   ApiNotFoundResponse,
@@ -11,7 +11,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import { MeWrapperResponseDTO } from "../swagger/me.response";
+import { MeWrapperResponseDTO } from "../../swagger/me.response";
 
 @ApiTags("Me")
 @ApiBearerAuth()
