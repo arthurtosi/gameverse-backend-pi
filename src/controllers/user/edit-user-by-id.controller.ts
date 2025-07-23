@@ -12,6 +12,7 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/pipes/zod-validation-pipe";
 import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
+import { CloudflareR2Service } from "../../services/r2-upload.service";
 
 const editAccountSchema = z.object({
   password: z.string(),
@@ -26,7 +27,10 @@ type EditAccountSchema = z.infer<typeof editAccountSchema>;
 @Controller("/user/:id")
 @UseGuards(JwtAuthGuard)
 export class EditAccountController {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private r2: CloudflareR2Service,
+  ) {}
 
   @Put()
   @UsePipes(new ZodValidationPipe(editAccountSchema))
@@ -44,6 +48,16 @@ export class EditAccountController {
       throw new NotFoundException("Usuário não encontrado.");
     }
 
+    let fotoURL: string | null = null;
+
+    if (foto !== null && foto.startsWith("https") === false) {
+      fotoURL = await this.r2.uploadBase64Image(foto);
+    }
+
+    if (foto !== null && foto.startsWith("https") === true) {
+      fotoURL = foto;
+    }
+
     await this.prisma.user.update({
       where: {
         id,
@@ -52,7 +66,7 @@ export class EditAccountController {
         email,
         password,
         username,
-        foto,
+        foto: fotoURL === null ? null : fotoURL,
         bio,
       },
     });

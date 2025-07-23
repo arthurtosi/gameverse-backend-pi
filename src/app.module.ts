@@ -11,6 +11,7 @@ import { EditAccountController } from "./controllers/user/edit-user-by-id.contro
 import { GetAllUsersController } from "./controllers/user/get-all-users.controller";
 import { EditMeController } from "./controllers/user/edit-me.controller";
 import { DeleteMeController } from "./controllers/user/delete-me.controller";
+import { CloudflareR2Service } from "./services/r2-upload.service";
 
 @Module({
   imports: [
@@ -33,6 +34,6 @@ import { DeleteMeController } from "./controllers/user/delete-me.controller";
 
     // game
   ],
-  providers: [PrismaService],
+  providers: [PrismaService, CloudflareR2Service],
 })
 export class AppModule {}
