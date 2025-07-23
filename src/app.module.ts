@@ -1,11 +1,16 @@
 import { Module } from "@nestjs/common";
 import { PrismaService } from "./prisma/prisma.service";
-import { CreateAccountController } from "./controllers/create-account.controller";
 import { ConfigModule } from "@nestjs/config";
 import { envSchema } from "./env";
 import { AuthModule } from "./auth/auth.module";
-import { AuthenticateController } from "./controllers/authenticate.controller";
-import { MeController } from "./controllers/me.controller";
+import { CreateAccountController } from "./controllers/user/create-account.controller";
+import { AuthenticateController } from "./controllers/user/authenticate.controller";
+import { GetMeController } from "./controllers/user/get-me.controller";
+import { DeleteUserController } from "./controllers/user/delete-user-by-id.controller";
+import { EditAccountController } from "./controllers/user/edit-user-by-id.controller";
+import { GetAllUsersController } from "./controllers/user/get-all-users.controller";
+import { EditMeController } from "./controllers/user/edit-me.controller";
+import { DeleteMeController } from "./controllers/user/delete-me.controller";
 
 @Module({
   imports: [
@@ -15,7 +20,19 @@ import { MeController } from "./controllers/me.controller";
     }),
     AuthModule,
   ],
-  controllers: [AuthenticateController, CreateAccountController, MeController],
+  controllers: [
+    // usuário
+    AuthenticateController,
+    CreateAccountController,
+    DeleteMeController,
+    DeleteUserController,
+    EditAccountController,
+    EditMeController,
+    GetMeController,
+    GetAllUsersController,
+
+    // game
+  ],
   providers: [PrismaService],
 })
 export class AppModule {}

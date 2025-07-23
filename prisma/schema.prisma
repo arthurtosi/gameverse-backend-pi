@@ -7,19 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum GameType {
-  RPG
-  ACAO
-  ESPORTE
-  MUNDO_ABERTO
-  SIMULADOR
-  TERROR
-  EDUCATIVO
-  CARTAS
-  TABULEIRO
-  AVENTURA
-}
-
 enum Role {
   ADMIN
   CLIENT
@@ -31,9 +18,12 @@ model User {
   email    String  @unique
   password String
   foto     String?
+  bio      String?
   role     Role    @default(CLIENT)
 
-  ratings Rating[]
+  ratings   Rating[]
+  gamelists GameList[]
+  comments  Comment[]
 
   @@map("user")
 }
@@ -43,37 +33,96 @@ model Game {
   name        String
   releaseDate DateTime @map("release_date")
   foto        String
-  category    GameType
 
-  ratings Rating[]
+  ratings                     Rating[]
+  relationGameAndGameList     RelationGameAndGameList[]
+  RelationGameAndGameGenre    RelationGameAndGameGenre[]
+  RelationGameAndGamePlatform RelationGameAndGamePlatform[]
 
   @@map("game")
 }
 
 model Rating {
-  id          String   @id @default(uuid())
-  description String?
-  createdAt   DateTime @default(now()) @map("created_at")
-  rate        Int
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+  rate      Int
+  title     String
 
   user     User   @relation(fields: [authorId], references: [id])
   authorId String @map("author_id")
-
-  game   Game   @relation(fields: [gameId], references: [id])
-  gameId String
+  game     Game   @relation(fields: [gameId], references: [id])
+  gameId   String @map("game_id")
 
   comments Comment[]
 
   @@map("rating")
 }
 
+// comentários em avaliações
 model Comment {
   id      String @id @default(uuid())
   content String
   rate    Int?
 
   rating   Rating @relation(fields: [ratingId], references: [id])
-  ratingId String
+  ratingId String @map("rating_id")
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String @map("user_id")
 
   @@map("comment")
+}
+
+model GameList {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  isPublic    Boolean  @map("is_public")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  relationGameAndGameList RelationGameAndGameList[]
+}
+
+model GamePlatform {
+  id   String @id @default(uuid())
+  name String
+
+  RelationGameAndGamePlatform RelationGameAndGamePlatform[]
+}
+
+model GameGenre {
+  id   String @id @default(uuid())
+  name String
+
+  RelationGameAndGameGenre RelationGameAndGameGenre[]
+}
+
+model RelationGameAndGameList {
+  id String @id @default(uuid())
+
+  game       Game     @relation(fields: [gameId], references: [id])
+  gameId     String
+  gameList   GameList @relation(fields: [gamelistId], references: [id])
+  gamelistId String
+}
+
+model RelationGameAndGameGenre {
+  id String @id @default(uuid())
+
+  game        Game      @relation(fields: [gameId], references: [id])
+  gameId      String
+  gameGenre   GameGenre @relation(fields: [gameGenreId], references: [id])
+  gameGenreId String
+}
+
+model RelationGameAndGamePlatform {
+  id String @id @default(uuid())
+
+  game           Game         @relation(fields: [gameId], references: [id])
+  gameId         String
+  gamePlatform   GamePlatform @relation(fields: [gamePlatformId], references: [id])
+  gamePlatformId String
 }
