@@ -17,7 +17,7 @@ import { MeWrapperResponseDTO } from "../../swagger/me.response";
 @ApiBearerAuth()
 @Controller("/me")
 @UseGuards(JwtAuthGuard)
-export class MeController {
+export class GetMeController {
   constructor(private prisma: PrismaService) {}
 
   @Get()
@@ -41,6 +41,8 @@ export class MeController {
       throw new NotFoundException("Usuário não encontrado.");
     }
 
-    return user;
+    return {
+      data: user,
+    };
   }
 }

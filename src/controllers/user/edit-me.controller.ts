@@ -1,16 +1,9 @@
-import {
-  Put,
-  UsePipes,
-  Body,
-  Controller,
-  NotFoundException,
-  Param,
-  HttpCode,
-  UseGuards,
-} from "@nestjs/common";
+import { Put, UsePipes, Body, Controller, UseGuards } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/pipes/zod-validation-pipe";
+import { CurrentUser } from "../../auth/current-user-decorator";
+import { UserPayload } from "../../auth/jwt.strategy";
 import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
 
 const editAccountSchema = z.object({
@@ -23,26 +16,19 @@ const editAccountSchema = z.object({
 
 type EditAccountSchema = z.infer<typeof editAccountSchema>;
 
-@Controller("/user/:id")
+@Controller("/me")
 @UseGuards(JwtAuthGuard)
-export class EditAccountController {
+export class EditMeController {
   constructor(private prisma: PrismaService) {}
 
   @Put()
   @UsePipes(new ZodValidationPipe(editAccountSchema))
-  @HttpCode(204)
-  async handle(@Body() body: EditAccountSchema, @Param() id: string) {
+  async handle(
+    @Body() body: EditAccountSchema,
+    @CurrentUser() userPayload: UserPayload,
+  ) {
+    const { sub: id } = userPayload;
     const { email, password, username, foto, bio } = body;
-
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!user) {
-      throw new NotFoundException("Usuário não encontrado.");
-    }
 
     await this.prisma.user.update({
       where: {

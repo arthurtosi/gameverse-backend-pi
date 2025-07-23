@@ -1,28 +1,26 @@
 import {
   Controller,
-  UseGuards,
+  Get,
   NotFoundException,
-  Delete,
   Param,
-  BadRequestException,
+  UseGuards,
 } from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
 import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
+import { PrismaService } from "../../prisma/prisma.service";
 
 @Controller("/user/:id")
 @UseGuards(JwtAuthGuard)
-export class DeleteUserController {
+export class GetAllUsersController {
   constructor(private prisma: PrismaService) {}
 
-  @Delete()
+  @Get()
   async handle(@Param() id: string) {
-    if (!id) {
-      throw new BadRequestException("ID não encontrado.");
-    }
-
-    const user = await this.prisma.user.delete({
+    const user = await this.prisma.user.findUnique({
       where: {
         id,
+      },
+      omit: {
+        password: true,
       },
     });
 
@@ -31,7 +29,7 @@ export class DeleteUserController {
     }
 
     return {
-      user,
+      data: user,
     };
   }
 }
