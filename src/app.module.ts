@@ -12,6 +12,7 @@ import { GetAllUsersController } from "./controllers/user/get-all-users.controll
 import { EditMeController } from "./controllers/user/edit-me.controller";
 import { DeleteMeController } from "./controllers/user/delete-me.controller";
 import { CloudflareR2Service } from "./services/r2-upload.service";
+import { GetUserByIdController } from "./controllers/user/get-user-by-id.controller";
 
 @Module({
   imports: [
@@ -29,8 +30,9 @@ import { CloudflareR2Service } from "./services/r2-upload.service";
     DeleteUserController,
     EditAccountController,
     EditMeController,
-    GetMeController,
     GetAllUsersController,
+    GetMeController,
+    GetUserByIdController,
 
     // game
   ],
