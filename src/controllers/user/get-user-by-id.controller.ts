@@ -10,7 +10,7 @@ import { PrismaService } from "../../prisma/prisma.service";
 
 @Controller("/user/:id")
 @UseGuards(JwtAuthGuard)
-export class GetAllUsersController {
+export class GetUserByIdController {
   constructor(private prisma: PrismaService) {}
 
   @Get()
