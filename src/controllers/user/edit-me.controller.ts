@@ -13,15 +13,11 @@ import { CurrentUser } from "../../auth/current-user-decorator";
 import { UserPayload } from "../../auth/jwt.strategy";
 import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
 import { CloudflareR2Service } from "../../services/r2-upload.service";
-import { hash } from "bcryptjs";
+// import { hash } from "bcryptjs";
 
 const editAccountSchema = z.object({
-  password: z.string().optional(),
-  username: z.string(),
-  email: z.string().email(),
   foto: z.string().nullable().optional(),
   bio: z.string().nullable().optional(),
-  role: z.enum(["CLIENT", "ADMIN"]),
 });
 
 const bodyValidationPipe = new ZodValidationPipe(editAccountSchema);
@@ -43,7 +39,7 @@ export class EditMeController {
     @CurrentUser() userPayload: UserPayload,
   ) {
     const { sub: id } = userPayload;
-    const { email, password, username, foto, bio, role } = body;
+    const { foto, bio } = body;
 
     const user = await this.prisma.user.findUnique({
       where: {
@@ -77,11 +73,11 @@ export class EditMeController {
       }
     }
 
-    let hashedPassword: string | null = null;
+    // let hashedPassword: string | null = null;
 
-    if (password) {
-      hashedPassword = await hash(password, 8);
-    }
+    // if (password) {
+    //   hashedPassword = await hash(password, 8);
+    // }
 
     // se não mandar nova senha
     await this.prisma.user.update({
@@ -89,13 +85,13 @@ export class EditMeController {
         id,
       },
       data: {
-        email,
-        username,
+        // email,
+        // username,
         foto: fotoURL,
         bio,
-        role,
-        password:
-          typeof hashedPassword === "string" ? hashedPassword : user.password,
+        // role,
+        // password:
+        //   typeof hashedPassword === "string" ? hashedPassword : user.password,
       },
     });
   }
