@@ -30,7 +30,7 @@ model User {
 
 model Game {
   id          String   @id @default(uuid())
-  name        String
+  name        String   @unique
   releaseDate DateTime @map("release_date")
   foto        String
 

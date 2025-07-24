@@ -14,6 +14,13 @@ import { DeleteMeController } from "./controllers/user/delete-me.controller";
 import { CloudflareR2Service } from "./services/r2-upload.service";
 import { GetUserByIdController } from "./controllers/user/get-user-by-id.controller";
 import { GetUserByUsernameController } from "./controllers/user/get-user-by-username.controller";
+import { GetAllGamesController } from "./controllers/game/get-all-games.controller";
+import { GetGameByIdController } from "./controllers/game/get-game-by-id.controller";
+import { DeleteGameByIdController } from "./controllers/game/delete-game-by-id.controller";
+import { CreateGameController } from "./controllers/game/create-game.controller";
+import { GetAllGamesWithSubstringController } from "./controllers/game/get-games-by-substring.controller";
+import { EditGameController } from "./controllers/game/edit-game.controller";
+import { GetGameByNameController } from "./controllers/game/get-game-by-name.controller";
 
 @Module({
   imports: [
@@ -37,6 +44,13 @@ import { GetUserByUsernameController } from "./controllers/user/get-user-by-user
     GetUserByUsernameController,
 
     // game
+    CreateGameController,
+    DeleteGameByIdController,
+    EditGameController,
+    GetAllGamesController,
+    GetAllGamesWithSubstringController,
+    GetGameByIdController,
+    GetGameByNameController,
   ],
   providers: [PrismaService, CloudflareR2Service],
 })
