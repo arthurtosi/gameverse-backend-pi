@@ -1,11 +1,9 @@
 import {
   Put,
-  UsePipes,
   Body,
   Controller,
   NotFoundException,
   Param,
-  HttpCode,
   UseGuards,
 } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
@@ -13,14 +11,18 @@ import { z } from "zod";
 import { ZodValidationPipe } from "src/pipes/zod-validation-pipe";
 import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
 import { CloudflareR2Service } from "../../services/r2-upload.service";
+import { hash } from "bcryptjs";
 
 const editAccountSchema = z.object({
-  password: z.string(),
+  password: z.string().optional(),
   username: z.string(),
   email: z.string().email(),
-  foto: z.string().nullable(),
-  bio: z.string().nullable(),
+  foto: z.string().nullable().optional(),
+  bio: z.string().nullable().optional(),
+  role: z.enum(["CLIENT", "ADMIN"]),
 });
+
+const bodyValidationPipe = new ZodValidationPipe(editAccountSchema);
 
 type EditAccountSchema = z.infer<typeof editAccountSchema>;
 
@@ -33,10 +35,11 @@ export class EditAccountController {
   ) {}
 
   @Put()
-  @UsePipes(new ZodValidationPipe(editAccountSchema))
-  @HttpCode(204)
-  async handle(@Body() body: EditAccountSchema, @Param() id: string) {
-    const { email, password, username, foto, bio } = body;
+  async handle(
+    @Body(bodyValidationPipe) body: EditAccountSchema,
+    @Param("id") id: string,
+  ) {
+    const { bio, email, foto, password, role, username } = body;
 
     const user = await this.prisma.user.findUnique({
       where: {
@@ -48,14 +51,32 @@ export class EditAccountController {
       throw new NotFoundException("Usuário não encontrado.");
     }
 
-    let fotoURL: string | null = null;
+    // foto antiga do usuário
+    let fotoURL: string | null = user.foto;
 
-    if (foto !== null && foto.startsWith("https") === false) {
-      fotoURL = await this.r2.uploadBase64Image(foto);
+    // se mandar uma foto e ela for nula ou se mandar uma foto e ela for um base64
+    if (
+      foto === null ||
+      (typeof foto === "string" && foto.startsWith("https") === false)
+    ) {
+      if (typeof fotoURL === "string") {
+        // se o usuário já tinha uma foto antes, deleta ela.
+        await this.r2.deleteImageToBucket(fotoURL);
+      }
+      // se a nova foto for um base 64
+      if (typeof foto === "string") {
+        fotoURL = await this.r2.uploadBase64Image(foto);
+      }
+      // se a nova foto for null
+      else {
+        fotoURL = null;
+      }
     }
 
-    if (foto !== null && foto.startsWith("https") === true) {
-      fotoURL = foto;
+    let hashedPassword: string | null = null;
+
+    if (password) {
+      hashedPassword = await hash(password, 8);
     }
 
     await this.prisma.user.update({
@@ -64,10 +85,12 @@ export class EditAccountController {
       },
       data: {
         email,
-        password,
         username,
-        foto: fotoURL === null ? null : fotoURL,
+        foto: fotoURL,
         bio,
+        role,
+        password:
+          typeof hashedPassword === "string" ? hashedPassword : user.password,
       },
     });
   }

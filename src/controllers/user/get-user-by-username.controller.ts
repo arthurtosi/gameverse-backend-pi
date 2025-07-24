@@ -8,16 +8,16 @@ import {
 import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
 import { PrismaService } from "../../prisma/prisma.service";
 
-@Controller("/user/:id")
+@Controller("/user/username/:username")
 @UseGuards(JwtAuthGuard)
-export class GetUserByIdController {
+export class GetUserByUsernameController {
   constructor(private prisma: PrismaService) {}
 
   @Get()
-  async handle(@Param("id") id: string) {
+  async handle(@Param("username") username: string) {
     const user = await this.prisma.user.findUnique({
       where: {
-        id,
+        username,
       },
       omit: {
         password: true,

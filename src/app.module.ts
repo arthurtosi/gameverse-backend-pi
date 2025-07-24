@@ -13,6 +13,7 @@ import { EditMeController } from "./controllers/user/edit-me.controller";
 import { DeleteMeController } from "./controllers/user/delete-me.controller";
 import { CloudflareR2Service } from "./services/r2-upload.service";
 import { GetUserByIdController } from "./controllers/user/get-user-by-id.controller";
+import { GetUserByUsernameController } from "./controllers/user/get-user-by-username.controller";
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { GetUserByIdController } from "./controllers/user/get-user-by-id.control
     GetAllUsersController,
     GetMeController,
     GetUserByIdController,
+    GetUserByUsernameController,
 
     // game
   ],
