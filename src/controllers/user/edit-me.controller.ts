@@ -1,4 +1,11 @@
-import { Put, Body, Controller, UseGuards, HttpCode } from "@nestjs/common";
+import {
+  Put,
+  Body,
+  Controller,
+  UseGuards,
+  HttpCode,
+  NotFoundException,
+} from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/pipes/zod-validation-pipe";
@@ -12,8 +19,8 @@ const editAccountSchema = z.object({
   password: z.string().optional(),
   username: z.string(),
   email: z.string().email(),
-  foto: z.string().nullable(),
-  bio: z.string().nullable(),
+  foto: z.string().nullable().optional(),
+  bio: z.string().nullable().optional(),
   role: z.enum(["CLIENT", "ADMIN"]),
 });
 
@@ -38,21 +45,35 @@ export class EditMeController {
     const { sub: id } = userPayload;
     const { email, password, username, foto, bio, role } = body;
 
-    let fotoURL: string | null = null;
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
 
-    if (foto !== null) {
-      if (foto.startsWith("https") === false) {
-        const user = await this.prisma.user.findUnique({
-          where: {
-            id,
-          },
-        });
-        if (user?.foto) {
-          await this.r2.deleteImageToBucket(user.foto);
-        }
+    if (!user) {
+      throw new NotFoundException("Usuário não encontrado.");
+    }
+
+    // foto antiga do usuário
+    let fotoURL: string | null = user.foto;
+
+    // se mandar uma foto e ela for nula ou se mandar uma foto e ela for um base64
+    if (
+      foto === null ||
+      (typeof foto === "string" && foto.startsWith("https") === false)
+    ) {
+      // se o usuário já tinha uma foto antes, deleta ela.
+      if (typeof fotoURL === "string") {
+        await this.r2.deleteImageToBucket(fotoURL);
+      }
+      // se a nova foto for um base 64
+      if (typeof foto === "string") {
         fotoURL = await this.r2.uploadBase64Image(foto);
-      } else {
-        fotoURL = foto;
+      }
+      // se a nova foto for null
+      else {
+        fotoURL = null;
       }
     }
 
@@ -63,34 +84,19 @@ export class EditMeController {
     }
 
     // se não mandar nova senha
-    if (hashedPassword === null) {
-      await this.prisma.user.update({
-        where: {
-          id,
-        },
-        data: {
-          email,
-          username,
-          foto: fotoURL,
-          bio,
-          role,
-        },
-      });
-    } // caso mande nova senha:
-    else {
-      await this.prisma.user.update({
-        where: {
-          id,
-        },
-        data: {
-          email,
-          username,
-          password: hashedPassword,
-          foto: fotoURL,
-          bio,
-          role,
-        },
-      });
-    }
+    await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        email,
+        username,
+        foto: fotoURL,
+        bio,
+        role,
+        password:
+          typeof hashedPassword === "string" ? hashedPassword : user.password,
+      },
+    });
   }
 }

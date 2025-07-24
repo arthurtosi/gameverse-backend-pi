@@ -51,16 +51,25 @@ export class EditAccountController {
       throw new NotFoundException("Usuário não encontrado.");
     }
 
-    let fotoURL: string | null = null;
+    // foto antiga do usuário
+    let fotoURL: string | null = user.foto;
 
-    if (foto !== null && foto !== undefined) {
-      if (foto.startsWith("https") === false) {
-        if (user?.foto) {
-          await this.r2.deleteImageToBucket(user.foto);
-        }
+    // se mandar uma foto e ela for nula ou se mandar uma foto e ela for um base64
+    if (
+      foto === null ||
+      (typeof foto === "string" && foto.startsWith("https") === false)
+    ) {
+      if (typeof fotoURL === "string") {
+        // se o usuário já tinha uma foto antes, deleta ela.
+        await this.r2.deleteImageToBucket(fotoURL);
+      }
+      // se a nova foto for um base 64
+      if (typeof foto === "string") {
         fotoURL = await this.r2.uploadBase64Image(foto);
-      } else {
-        fotoURL = foto;
+      }
+      // se a nova foto for null
+      else {
+        fotoURL = null;
       }
     }
 
@@ -70,35 +79,19 @@ export class EditAccountController {
       hashedPassword = await hash(password, 8);
     }
 
-    // se não mandar nova senha
-    if (hashedPassword === null) {
-      await this.prisma.user.update({
-        where: {
-          id,
-        },
-        data: {
-          email,
-          username,
-          foto: fotoURL,
-          bio,
-          role,
-        },
-      });
-    } // caso mande nova senha:
-    else {
-      await this.prisma.user.update({
-        where: {
-          id,
-        },
-        data: {
-          email,
-          username,
-          password: hashedPassword,
-          foto: fotoURL,
-          bio,
-          role,
-        },
-      });
-    }
+    await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        email,
+        username,
+        foto: fotoURL,
+        bio,
+        role,
+        password:
+          typeof hashedPassword === "string" ? hashedPassword : user.password,
+      },
+    });
   }
 }
