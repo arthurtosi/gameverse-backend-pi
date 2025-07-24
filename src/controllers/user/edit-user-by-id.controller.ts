@@ -1,11 +1,9 @@
 import {
   Put,
-  UsePipes,
   Body,
   Controller,
   NotFoundException,
   Param,
-  HttpCode,
   UseGuards,
 } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
@@ -13,14 +11,18 @@ import { z } from "zod";
 import { ZodValidationPipe } from "src/pipes/zod-validation-pipe";
 import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
 import { CloudflareR2Service } from "../../services/r2-upload.service";
+import { hash } from "bcryptjs";
 
 const editAccountSchema = z.object({
-  password: z.string(),
+  password: z.string().optional(),
   username: z.string(),
   email: z.string().email(),
-  foto: z.string().nullable(),
-  bio: z.string().nullable(),
+  foto: z.string().nullable().optional(),
+  bio: z.string().nullable().optional(),
+  role: z.enum(["CLIENT", "ADMIN"]),
 });
+
+const bodyValidationPipe = new ZodValidationPipe(editAccountSchema);
 
 type EditAccountSchema = z.infer<typeof editAccountSchema>;
 
@@ -33,10 +35,11 @@ export class EditAccountController {
   ) {}
 
   @Put()
-  @UsePipes(new ZodValidationPipe(editAccountSchema))
-  @HttpCode(204)
-  async handle(@Body() body: EditAccountSchema, @Param() id: string) {
-    const { email, password, username, foto, bio } = body;
+  async handle(
+    @Body(bodyValidationPipe) body: EditAccountSchema,
+    @Param("id") id: string,
+  ) {
+    const { bio, email, foto, password, role, username } = body;
 
     const user = await this.prisma.user.findUnique({
       where: {
@@ -50,25 +53,52 @@ export class EditAccountController {
 
     let fotoURL: string | null = null;
 
-    if (foto !== null && foto.startsWith("https") === false) {
-      fotoURL = await this.r2.uploadBase64Image(foto);
+    if (foto !== null && foto !== undefined) {
+      if (foto.startsWith("https") === false) {
+        if (user?.foto) {
+          await this.r2.deleteImageToBucket(user.foto);
+        }
+        fotoURL = await this.r2.uploadBase64Image(foto);
+      } else {
+        fotoURL = foto;
+      }
     }
 
-    if (foto !== null && foto.startsWith("https") === true) {
-      fotoURL = foto;
+    let hashedPassword: string | null = null;
+
+    if (password) {
+      hashedPassword = await hash(password, 8);
     }
 
-    await this.prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        email,
-        password,
-        username,
-        foto: fotoURL === null ? null : fotoURL,
-        bio,
-      },
-    });
+    // se não mandar nova senha
+    if (hashedPassword === null) {
+      await this.prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          email,
+          username,
+          foto: fotoURL,
+          bio,
+          role,
+        },
+      });
+    } // caso mande nova senha:
+    else {
+      await this.prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          email,
+          username,
+          password: hashedPassword,
+          foto: fotoURL,
+          bio,
+          role,
+        },
+      });
+    }
   }
 }

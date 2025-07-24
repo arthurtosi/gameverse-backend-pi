@@ -1,5 +1,10 @@
-import { ConflictException, UsePipes } from "@nestjs/common";
-import { Body, Controller, Post } from "@nestjs/common";
+import {
+  ConflictException,
+  UsePipes,
+  Body,
+  Controller,
+  Post,
+} from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { hash } from "bcryptjs";
 import { z } from "zod";
@@ -9,6 +14,7 @@ const createAccountSchema = z.object({
   password: z.string(),
   username: z.string(),
   email: z.string().email(),
+  role: z.enum(["CLIENT", "ADMIN"]).optional(),
 });
 
 type CreateAccountSchema = z.infer<typeof createAccountSchema>;
@@ -20,7 +26,7 @@ export class CreateAccountController {
   @Post()
   @UsePipes(new ZodValidationPipe(createAccountSchema))
   async handle(@Body() body: CreateAccountSchema) {
-    const { email, password, username } = body;
+    const { email, password, username, role } = body;
 
     const userWithSameEmail = await this.prisma.user.findUnique({
       where: {
@@ -49,6 +55,7 @@ export class CreateAccountController {
         email,
         password: hashedPassword,
         username,
+        role,
       },
     });
   }

@@ -1,4 +1,8 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} from "@aws-sdk/client-s3";
 import { Injectable } from "@nestjs/common";
 import { randomUUID } from "crypto";
 import { env } from "../env";
@@ -41,5 +45,17 @@ export class CloudflareR2Service {
     );
 
     return `${env.R2_PUBLIC_URL}/${key}`;
+  }
+
+  async deleteImageToBucket(imageLink: string): Promise<void> {
+    const url = new URL(imageLink);
+    const key = url.pathname.slice(1);
+
+    await this.s3.send(
+      new DeleteObjectCommand({
+        Bucket: process.env.R2_BUCKET_NAME,
+        Key: key,
+      }),
+    );
   }
 }

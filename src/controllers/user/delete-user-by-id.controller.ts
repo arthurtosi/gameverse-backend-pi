@@ -16,8 +16,8 @@ export class DeleteUserController {
 
   @Delete()
   @HttpCode(204)
-  async handle(@Param() id: string) {
-    const user = await this.prisma.user.delete({
+  async handle(@Param("id") id: string) {
+    const user = await this.prisma.user.findUnique({
       where: {
         id,
       },
