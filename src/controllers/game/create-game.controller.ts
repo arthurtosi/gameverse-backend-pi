@@ -1,6 +1,5 @@
 import {
   ConflictException,
-  UsePipes,
   Body,
   Controller,
   Post,
@@ -21,6 +20,8 @@ const createGameSchema = z.object({
   foto: z.string(),
 });
 
+const bodyValidationPipe = new ZodValidationPipe(createGameSchema);
+
 type CreateGameSchema = z.infer<typeof createGameSchema>;
 
 @Controller("/game")
@@ -32,10 +33,9 @@ export class CreateGameController {
   ) {}
 
   @Post()
-  @UsePipes(new ZodValidationPipe(createGameSchema))
   async handle(
+    @Body(bodyValidationPipe) body: CreateGameSchema,
     @CurrentUser() userPayload: UserPayload,
-    @Body() body: CreateGameSchema,
   ) {
     const { sub: id } = userPayload;
     const { name, foto, releaseDate } = body;
