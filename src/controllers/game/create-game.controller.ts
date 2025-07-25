@@ -13,6 +13,7 @@ import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
 import { CloudflareR2Service } from "../../services/r2-upload.service";
 import { CurrentUser } from "../../auth/current-user-decorator";
 import { UserPayload } from "../../auth/jwt.strategy";
+import { generateSlug } from "../../utils/gerar-slug";
 
 const createGameSchema = z.object({
   name: z.string(),
@@ -60,6 +61,18 @@ export class CreateGameController {
       throw new ConflictException("Jogo com mesmo nome já existe.");
     }
 
+    const slug = generateSlug(name);
+
+    const gameWithSameSlug = await this.prisma.game.findUnique({
+      where: {
+        slug,
+      },
+    });
+
+    if (gameWithSameSlug) {
+      throw new ConflictException("Jogo com mesmo slug já existe.");
+    }
+
     const fotoURL = await this.r2.uploadBase64Image(foto);
 
     await this.prisma.game.create({
@@ -67,6 +80,7 @@ export class CreateGameController {
         foto: fotoURL,
         name,
         releaseDate: new Date(releaseDate),
+        slug,
       },
     });
   }

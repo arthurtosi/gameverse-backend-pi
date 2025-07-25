@@ -8,11 +8,15 @@ import {
 } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
+import { CloudflareR2Service } from "../../services/r2-upload.service";
 
 @Controller("/user/:id")
 @UseGuards(JwtAuthGuard)
 export class DeleteUserController {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private r2: CloudflareR2Service,
+  ) {}
 
   @Delete()
   @HttpCode(204)
@@ -25,6 +29,10 @@ export class DeleteUserController {
 
     if (!user) {
       throw new NotFoundException("Usuário não encontrado.");
+    }
+
+    if (user.foto) {
+      await this.r2.deleteImageToBucket(user.foto);
     }
 
     await this.prisma.user.delete({

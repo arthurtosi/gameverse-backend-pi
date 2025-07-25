@@ -33,6 +33,7 @@ model Game {
   name        String   @unique
   releaseDate DateTime @map("release_date")
   foto        String
+  slug        String   @unique
 
   ratings                     Rating[]
   relationGameAndGameList     RelationGameAndGameList[]

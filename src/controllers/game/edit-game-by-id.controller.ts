@@ -6,6 +6,7 @@ import {
   Param,
   NotFoundException,
   UnauthorizedException,
+  ConflictException,
 } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { z } from "zod";
@@ -14,6 +15,7 @@ import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
 import { CloudflareR2Service } from "../../services/r2-upload.service";
 import { UserPayload } from "../../auth/jwt.strategy";
 import { CurrentUser } from "../../auth/current-user-decorator";
+import { generateSlug } from "../../utils/gerar-slug";
 
 const editGameSchema = z.object({
   name: z.string(),
@@ -62,6 +64,20 @@ export class EditGameController {
       throw new NotFoundException("Jogo não encontrado.");
     }
 
+    const slug = generateSlug(name);
+
+    const gameWithSameSlug = await this.prisma.game.findUnique({
+      where: {
+        slug,
+      },
+    });
+
+    if (gameWithSameSlug?.id !== id) {
+      throw new ConflictException(
+        "Não foi possível editar: Jogo com mesmo nome já está cadastrado.",
+      );
+    }
+
     let fotoURL = game.foto;
 
     // se a foto não for a mesma de antes:
@@ -78,6 +94,7 @@ export class EditGameController {
         foto: fotoURL,
         name,
         releaseDate: new Date(releaseDate),
+        slug,
       },
     });
   }

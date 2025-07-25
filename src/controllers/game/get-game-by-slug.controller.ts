@@ -8,16 +8,16 @@ import {
 import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
 import { PrismaService } from "../../prisma/prisma.service";
 
-@Controller("/game/name/:name")
+@Controller("/game/slug/:slug")
 @UseGuards(JwtAuthGuard)
-export class GetGameByNameController {
+export class GetGameBySlugController {
   constructor(private prisma: PrismaService) {}
 
   @Get()
-  async handle(@Param("name") name: string) {
+  async handle(@Param("slug") slug: string) {
     const game = await this.prisma.game.findUnique({
       where: {
-        name,
+        slug,
       },
     });
 

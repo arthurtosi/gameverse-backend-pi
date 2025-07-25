@@ -20,7 +20,7 @@ import { DeleteGameByIdController } from "./controllers/game/delete-game-by-id.c
 import { CreateGameController } from "./controllers/game/create-game.controller";
 import { GetAllGamesWithSubstringController } from "./controllers/game/get-games-by-substring.controller";
 import { EditGameController } from "./controllers/game/edit-game-by-id.controller";
-import { GetGameByNameController } from "./controllers/game/get-game-by-name.controller";
+import { GetGameBySlugController } from "./controllers/game/get-game-by-slug.controller";
 import { DeleteRatingByIdController } from "./controllers/rating/delete-rating-by-id.controller";
 import { GetRatingsByGameIdController } from "./controllers/rating/get-ratings-by-game-id.controller";
 import { GetRatingsByUserIdController } from "./controllers/rating/get-ratings-by-user-id.controller";
@@ -54,7 +54,7 @@ import { GetAllRatingsController } from "./controllers/rating/get-all-ratings.co
     GetAllGamesController,
     GetAllGamesWithSubstringController,
     GetGameByIdController,
-    GetGameByNameController,
+    GetGameBySlugController,
 
     // user
     DeleteRatingByIdController,
