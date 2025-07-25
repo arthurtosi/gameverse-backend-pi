@@ -35,9 +35,9 @@ export class EditGameController {
 
   @Put()
   async handle(
+    @CurrentUser() userPayload: UserPayload,
     @Body(bodyValidationPipe) body: EditGameSchema,
     @Param("id") id: string,
-    @CurrentUser() userPayload: UserPayload,
   ) {
     const { sub } = userPayload;
     const { name, foto, releaseDate } = body;
