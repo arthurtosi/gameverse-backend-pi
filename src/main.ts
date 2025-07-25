@@ -3,6 +3,7 @@ import { AppModule } from "./app.module";
 import { ConfigService } from "@nestjs/config";
 import { Env } from "./env";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import * as bodyParser from "body-parser";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -15,6 +16,9 @@ async function bootstrap() {
     origin: "*",
     credentials: true,
   });
+
+  app.use(bodyParser.json({ limit: "25mb" }));
+  app.use(bodyParser.urlencoded({ limit: "25mb", extended: true }));
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle("API - GameVerse")

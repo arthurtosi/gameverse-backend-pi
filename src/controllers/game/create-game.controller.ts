@@ -5,12 +5,15 @@ import {
   Controller,
   Post,
   UseGuards,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/pipes/zod-validation-pipe";
 import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
 import { CloudflareR2Service } from "../../services/r2-upload.service";
+import { CurrentUser } from "../../auth/current-user-decorator";
+import { UserPayload } from "../../auth/jwt.strategy";
 
 const createGameSchema = z.object({
   name: z.string(),
@@ -30,8 +33,22 @@ export class CreateGameController {
 
   @Post()
   @UsePipes(new ZodValidationPipe(createGameSchema))
-  async handle(@Body() body: CreateGameSchema) {
+  async handle(
+    @Body() body: CreateGameSchema,
+    @CurrentUser() userPayload: UserPayload,
+  ) {
+    const { sub: id } = userPayload;
     const { name, foto, releaseDate } = body;
+
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException("Usuário não encontrado.");
+    }
 
     const gameWithSameName = await this.prisma.game.findUnique({
       where: {
@@ -49,7 +66,7 @@ export class CreateGameController {
       data: {
         foto: fotoURL,
         name,
-        releaseDate,
+        releaseDate: new Date(releaseDate),
       },
     });
   }
