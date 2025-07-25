@@ -13,6 +13,7 @@ export class GetAllGamesWithSubstringController {
       where: {
         name: {
           contains: substring,
+          mode: "insensitive",
         },
       },
     });

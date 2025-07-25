@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "game" ALTER COLUMN "slug" DROP DEFAULT;
