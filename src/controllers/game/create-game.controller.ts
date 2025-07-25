@@ -34,8 +34,8 @@ export class CreateGameController {
   @Post()
   @UsePipes(new ZodValidationPipe(createGameSchema))
   async handle(
-    @Body() body: CreateGameSchema,
     @CurrentUser() userPayload: UserPayload,
+    @Body() body: CreateGameSchema,
   ) {
     const { sub: id } = userPayload;
     const { name, foto, releaseDate } = body;
