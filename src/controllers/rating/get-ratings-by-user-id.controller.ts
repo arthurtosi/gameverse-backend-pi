@@ -17,8 +17,6 @@ export class GetRatingsByUserIdController {
       },
     });
 
-    return {
-      data: ratings,
-    };
+    return ratings;
   }
 }
