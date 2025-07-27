@@ -25,8 +25,6 @@ export class GetGameBySlugController {
       throw new NotFoundException("Jogo não encontrado.");
     }
 
-    return {
-      data: game,
-    };
+    return game;
   }
 }

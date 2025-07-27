@@ -17,8 +17,6 @@ export class GetRatingsByGameIdController {
       },
     });
 
-    return {
-      data: ratings,
-    };
+    return ratings;
   }
 }

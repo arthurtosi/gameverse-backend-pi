@@ -28,8 +28,6 @@ export class GetUserByUsernameController {
       throw new NotFoundException("Usuário não encontrado.");
     }
 
-    return {
-      data: user,
-    };
+    return user;
   }
 }

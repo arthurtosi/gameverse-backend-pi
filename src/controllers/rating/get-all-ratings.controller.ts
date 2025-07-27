@@ -11,8 +11,6 @@ export class GetAllRatingsController {
   async handle() {
     const ratings = await this.prisma.rating.findMany();
 
-    return {
-      data: ratings,
-    };
+    return ratings;
   }
 }

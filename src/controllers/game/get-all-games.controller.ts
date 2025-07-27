@@ -11,8 +11,6 @@ export class GetAllGamesController {
   async handle() {
     const games = await this.prisma.game.findMany();
 
-    return {
-      data: games,
-    };
+    return games;
   }
 }

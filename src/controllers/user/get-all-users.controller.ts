@@ -15,8 +15,6 @@ export class GetAllUsersController {
       },
     });
 
-    return {
-      data: users,
-    };
+    return users;
   }
 }

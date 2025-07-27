@@ -18,8 +18,6 @@ export class GetAllGamesWithSubstringController {
       },
     });
 
-    return {
-      data: games,
-    };
+    return games;
   }
 }
