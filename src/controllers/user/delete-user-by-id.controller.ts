@@ -35,6 +35,18 @@ export class DeleteUserController {
       await this.r2.deleteImageToBucket(user.foto);
     }
 
+    await this.prisma.rating.deleteMany({
+      where: {
+        authorId: id,
+      },
+    });
+
+    await this.prisma.comment.deleteMany({
+      where: {
+        userId: id,
+      },
+    });
+
     await this.prisma.user.delete({
       where: {
         id,

@@ -31,6 +31,12 @@ import { GetGameListByIdController } from "./controllers/game-list/get-gamelist-
 import { CreateRatingController } from "./controllers/rating/create-rating.controller";
 import { GetRatingByIdController } from "./controllers/rating/get-rating-by-id.controller";
 import { UpdateRatingController } from "./controllers/rating/update-rating-by-id.controller";
+import { CreateCommentController } from "./controllers/comment/create-comment.controller";
+import { GetCommentsOnRatingController } from "./controllers/comment/get-comments-on-rating.controller";
+import { GetCommentsOfAnUserController } from "./controllers/comment/get-user-comments.controller";
+import { GetCommentByIdController } from "./controllers/comment/get-comment-byid.controller";
+import { DeleteCommentByIdController } from "./controllers/comment/delete-comment-by-id.controller";
+import { EditCommentController } from "./controllers/comment/edit-comment-by-id.controller";
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -69,6 +75,14 @@ import { UpdateRatingController } from "./controllers/rating/update-rating-by-id
     GetRatingsByUserIdController,
     GetRatingByIdController,
     UpdateRatingController,
+
+    // Comment
+    CreateCommentController,
+    DeleteCommentByIdController,
+    EditCommentController,
+    GetCommentByIdController,
+    GetCommentsOfAnUserController,
+    GetCommentsOnRatingController,
 
     // Gamelist
     CreateGameListController,

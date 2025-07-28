@@ -33,6 +33,20 @@ export class DeleteGameByIdController {
 
     await this.r2.deleteImageToBucket(game.foto);
 
+    await this.prisma.rating.deleteMany({
+      where: {
+        gameId: id,
+      },
+    });
+
+    await this.prisma.comment.deleteMany({
+      where: {
+        rating: {
+          gameId: id,
+        },
+      },
+    });
+
     await this.prisma.game.delete({
       where: {
         id,
