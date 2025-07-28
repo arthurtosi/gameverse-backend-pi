@@ -9,7 +9,16 @@ export class GetAllRatingsController {
 
   @Get()
   async handle() {
-    const ratings = await this.prisma.rating.findMany();
+    const ratings = await this.prisma.rating.findMany({
+      include: {
+        game: true,
+        user: {
+          omit: {
+            password: true,
+          },
+        },
+      },
+    });
 
     return ratings;
   }

@@ -11,8 +11,13 @@ export class GetRatingsByGameIdController {
   async handle(@Param("id") gameId: string) {
     const ratings = await this.prisma.rating.findMany({
       where: {
-        game: {
-          id: gameId,
+        gameId,
+      },
+      include: {
+        user: {
+          omit: {
+            password: false,
+          },
         },
       },
     });

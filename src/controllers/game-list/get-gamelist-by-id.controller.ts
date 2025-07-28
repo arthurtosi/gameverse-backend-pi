@@ -19,7 +19,7 @@ export class GetGameListByIdController {
   @Get("/:listId")
   async handle(
     @Param("listId") listId: string,
-    @CurrentUser() userPayload: UserPayload
+    @CurrentUser() userPayload: UserPayload,
   ) {
     const { sub: authenticatedUserId } = userPayload;
 

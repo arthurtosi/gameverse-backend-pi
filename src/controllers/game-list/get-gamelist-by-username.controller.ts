@@ -18,7 +18,7 @@ export class GetGamelistsByUsernameController {
   @Get("/:username")
   async handle(
     @Param("username") usernameParam: string,
-    @CurrentUser() userPayload: UserPayload
+    @CurrentUser() userPayload: UserPayload,
   ) {
     const { sub: authenticatedUserId } = userPayload;
 
