@@ -20,6 +20,9 @@ export class GetCommentsOnRatingController {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     return comments;

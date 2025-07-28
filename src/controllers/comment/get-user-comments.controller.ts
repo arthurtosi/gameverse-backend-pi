@@ -25,6 +25,9 @@ export class GetCommentsOfAnUserController {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     return comments;
