@@ -30,7 +30,7 @@ export class CreateGameListController {
   @Post()
   async handle(
     @Body(bodyValidationPipe) body: CreateGameListSchema,
-    @CurrentUser() userPayload: UserPayload
+    @CurrentUser() userPayload: UserPayload,
   ) {
     const { sub: userId } = userPayload;
     const { title, isPublic, games } = body;

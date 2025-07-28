@@ -28,6 +28,9 @@ import { GetAllRatingsController } from "./controllers/rating/get-all-ratings.co
 import { CreateGameListController } from "./controllers/game-list/create-gamelist.controller";
 import { GetGamelistsByUsernameController } from "./controllers/game-list/get-gamelist-by-username.controller";
 import { GetGameListByIdController } from "./controllers/game-list/get-gamelist-by-id.controller";
+import { CreateRatingController } from "./controllers/rating/create-rating.controller";
+import { GetRatingByIdController } from "./controllers/rating/get-rating-by-id.controller";
+import { UpdateRatingController } from "./controllers/rating/update-rating-by-id.controller";
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -58,16 +61,21 @@ import { GetGameListByIdController } from "./controllers/game-list/get-gamelist-
     GetGameByIdController,
     GetGameBySlugController,
 
-    // user
+    // Rating
+    CreateRatingController,
     DeleteRatingByIdController,
     GetAllRatingsController,
     GetRatingsByGameIdController,
     GetRatingsByUserIdController,
+    GetRatingByIdController,
+    UpdateRatingController,
 
     // Gamelist
     CreateGameListController,
     GetGamelistsByUsernameController,
     GetGameListByIdController,
+
+    GetRatingsByUserIdController,
   ],
   providers: [PrismaService, CloudflareR2Service],
 })
