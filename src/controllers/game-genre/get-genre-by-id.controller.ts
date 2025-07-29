@@ -22,7 +22,7 @@ export class GetGenreByIdController {
     });
 
     if (!genre) {
-      throw new NotFoundException("Plataforma não encontrada.");
+      throw new NotFoundException("Gênero não encontrado.");
     }
 
     return genre;

@@ -41,7 +41,7 @@ export class EditGenreByIdController {
     });
 
     if (!genre) {
-      throw new NotFoundException("Plataforma não encontrada.");
+      throw new NotFoundException("Gênero não encontrado.");
     }
 
     const slug = generateSlug(name);
@@ -53,7 +53,7 @@ export class EditGenreByIdController {
     });
 
     if (genreWithSameSlug && genreWithSameSlug.id !== genreId) {
-      throw new ForbiddenException("Plataforma com mesmo nome já cadastrada.");
+      throw new ForbiddenException("Gênero com mesmo nome já cadastrado.");
     }
 
     await this.prisma.gameGenre.update({
