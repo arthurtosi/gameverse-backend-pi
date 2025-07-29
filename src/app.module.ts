@@ -37,6 +37,11 @@ import { GetCommentsOfAnUserController } from "./controllers/comment/get-user-co
 import { GetCommentByIdController } from "./controllers/comment/get-comment-byid.controller";
 import { DeleteCommentByIdController } from "./controllers/comment/delete-comment-by-id.controller";
 import { EditCommentController } from "./controllers/comment/edit-comment-by-id.controller";
+import { CreatePlatformController } from "./controllers/game-platform/create-game-platform.controller";
+import { DeletePlatformByIdController } from "./controllers/game-platform/delete-platform-by-id.controller";
+import { EditPlatformByIdController } from "./controllers/game-platform/edit-platform-by-id.controller";
+import { GetAllPlatformsController } from "./controllers/game-platform/get-all-platforms.controller";
+import { GetPlatformByIdController } from "./controllers/game-platform/get-platform-by-id.controller";
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -89,7 +94,12 @@ import { EditCommentController } from "./controllers/comment/edit-comment-by-id.
     GetGamelistsByUsernameController,
     GetGameListByIdController,
 
-    GetRatingsByUserIdController,
+    // Platform
+    CreatePlatformController,
+    DeletePlatformByIdController,
+    EditPlatformByIdController,
+    GetAllPlatformsController,
+    GetPlatformByIdController,
   ],
   providers: [PrismaService, CloudflareR2Service],
 })
