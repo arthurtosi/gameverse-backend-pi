@@ -47,6 +47,8 @@ import { DeleteGenreByIdController } from "./controllers/game-genre/delete-game-
 import { EditGenreByIdController } from "./controllers/game-genre/edit-game-genre.controller";
 import { GetGenreByIdController } from "./controllers/game-genre/get-genre-by-id.controller";
 import { GetAllGenresController } from "./controllers/game-genre/get-all-genres.controller";
+import { DeleteGameListByIdController } from "./controllers/game-list/delete-gamelist-by-id.controller";
+import { EditGameListByIdController } from "./controllers/game-list/edit-gamelist.controller";
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -96,6 +98,8 @@ import { GetAllGenresController } from "./controllers/game-genre/get-all-genres.
 
     // Gamelist
     CreateGameListController,
+    DeleteGameListByIdController,
+    EditGameListByIdController,
     GetGamelistsByUsernameController,
     GetGameListByIdController,
 

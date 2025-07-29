@@ -13,7 +13,7 @@ import { CurrentUser } from "src/auth/current-user-decorator";
 import { UserPayload } from "src/auth/jwt.strategy";
 
 const createGameListSchema = z.object({
-  title: z.string().min(1, "Título é obrigatório."),
+  title: z.string().nonempty(),
   isPublic: z.boolean(),
   games: z.array(z.string().uuid()).min(1, "Selecione ao menos um jogo."),
 });

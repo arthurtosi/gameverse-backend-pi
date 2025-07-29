@@ -50,9 +50,9 @@ model Rating {
   rate      Int
   title     String
 
-  user     User   @relation(fields: [authorId], references: [id])
+  user     User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String @map("author_id")
-  game     Game   @relation(fields: [gameId], references: [id])
+  game     Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId   String @map("game_id")
 
   comments Comment[]
@@ -68,7 +68,7 @@ model Comment {
 
   rating   Rating @relation(fields: [ratingId], references: [id], onDelete: Cascade)
   ratingId String @map("rating_id")
-  user     User   @relation(fields: [userId], references: [id])
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   String @map("user_id")
 
   @@map("comment")
@@ -81,7 +81,7 @@ model GameList {
   isPublic    Boolean  @map("is_public")
   createdAt   DateTime @default(now()) @map("created_at")
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   relationGameAndGameList RelationGameAndGameList[]
@@ -106,26 +106,26 @@ model GameGenre {
 model RelationGameAndGameList {
   id String @id @default(uuid())
 
-  game       Game     @relation(fields: [gameId], references: [id])
+  game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId     String
-  gameList   GameList @relation(fields: [gamelistId], references: [id])
+  gameList   GameList @relation(fields: [gamelistId], references: [id], onDelete: Cascade)
   gamelistId String
 }
 
 model RelationGameAndGameGenre {
   id String @id @default(uuid())
 
-  game        Game      @relation(fields: [gameId], references: [id])
+  game        Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId      String
-  gameGenre   GameGenre @relation(fields: [gameGenreId], references: [id])
+  gameGenre   GameGenre @relation(fields: [gameGenreId], references: [id], onDelete: Cascade)
   gameGenreId String
 }
 
 model RelationGameAndGamePlatform {
   id String @id @default(uuid())
 
-  game           Game         @relation(fields: [gameId], references: [id])
+  game           Game         @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId         String
-  gamePlatform   GamePlatform @relation(fields: [gamePlatformId], references: [id])
+  gamePlatform   GamePlatform @relation(fields: [gamePlatformId], references: [id], onDelete: Cascade)
   gamePlatformId String
 }
