@@ -90,6 +90,7 @@ model GameList {
 model GamePlatform {
   id   String @id @default(uuid())
   name String
+  slug String @unique
 
   RelationGameAndGamePlatform RelationGameAndGamePlatform[]
 }
