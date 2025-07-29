@@ -42,6 +42,11 @@ import { DeletePlatformByIdController } from "./controllers/game-platform/delete
 import { EditPlatformByIdController } from "./controllers/game-platform/edit-platform-by-id.controller";
 import { GetAllPlatformsController } from "./controllers/game-platform/get-all-platforms.controller";
 import { GetPlatformByIdController } from "./controllers/game-platform/get-platform-by-id.controller";
+import { CreateGenreController } from "./controllers/game-genre/create-game-genre.controller";
+import { DeleteGenreByIdController } from "./controllers/game-genre/delete-game-genre.controller";
+import { EditGenreByIdController } from "./controllers/game-genre/edit-game-genre.controller";
+import { GetGenreByIdController } from "./controllers/game-genre/get-genre-by-id.controller";
+import { GetAllGenresController } from "./controllers/game-genre/get-all-genres.controller";
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -100,6 +105,13 @@ import { GetPlatformByIdController } from "./controllers/game-platform/get-platf
     EditPlatformByIdController,
     GetAllPlatformsController,
     GetPlatformByIdController,
+
+    // Genre
+    CreateGenreController,
+    DeleteGenreByIdController,
+    EditGenreByIdController,
+    GetGenreByIdController,
+    GetAllGenresController,
   ],
   providers: [PrismaService, CloudflareR2Service],
 })
