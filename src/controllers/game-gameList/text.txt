@@ -1,0 +1,1 @@
+Trabalhar relações many to many entre jogos e listas de jogos.
