@@ -1,51 +1,109 @@
-# Backend Projeto Integrado
-Esse repositório representa o back-end de projeto integrado, em que fazemos um letterboxd para games com integração com o instagram.<br/>
-Esse repositório roda na porta **8080**.
-## Tecnologias usadas
-+ Prisma - ORM.
-+ Prisma Client - Query builder.
-+ Nest - Framework.
-+ Docker - Container.
-+ Zod - Garante tipagens.
-+ Zod Validation Error - Garante mensagens mais claras para erros do Zod.
-+ Bcrypt - senha com hash.
-+ Cloudflare R2 - Salvar imagens gratuitamente.
-+ Swagger - Documentação da API.
-+ Nestjs Passport + Nestjs JWT - Autenticação JWT.
-## Como rodar:
-```
-npm i # instala as dependências da aplicação
-docker-compose up -d # Sobe o container do docker para o ar
-npx prisma migrate dev # gera as tipagens do prisma e as migrations
-npm run start:dev # Roda a API localmente.
-```
-## Como rodar testes e2e em modo watch:
-```
-npm run test:e2e:watch
-```
-### Observações:
-> + Para realizar os testes e2e, antes você deve ter instalado as dependências da aplicação e feito npx prisma migrate dev
-> + Caso queira rodar os testes somente 1 vez rode:<br>**npm run test:e2e**
-## Como parar a aplicação
-+ Caso queira parar de fazer o banco rodar:<br> ```docker-compose stop```
-+ Caso queira deletar tudo, inclusive as informações das tabelas:<br>```docker-compose down -v```
-## Como ver o banco de dados em tempo real
-Considerando que você esteja rodando a api com:
-```
-npm run start:dev
-```
-Abra um novo terminal, sem desligar a api e no mesmo diretório da api, digite:
+# GameVerse Back-end
+
+- Obs: A documentação do front-end se encontra nesse repositório [https://github.com/theo-mattsa/gameverse-frontPI]
+
+## Diagrama de classes do domínio do problema
+
+![Diagrama de classes](readme-imgs/image.png)
+
+## Ferramentas escolhidas
+
+- Versionamento de código: Git
+- Teste unitários e de integração: Vitest
+- Issue tracking: Jira
+- CI/CD: Github Actions
+- Deploy: Railway
+- Containers: Docker
+- Armazenamento de arquivos: Cloudfare R2
+
+## Frameworks utilizados
+
+- NestJS – Framework principal para construção da API
+- Prisma – ORM para banco de dados relacional
+- Passport (com JWT) – Framework de autenticação para Node.js
+- Vitest – Framework de testes (unitários e e2e)
+
+## Como gerar a documentação do código
+
+- Ferramenta utilizada: Swagger
+
+Com a API rodando em modo desenvolvimento, acesse no seu navegador:
+
+http://localhost:8080/swagger
+
+Assim, você poderá visualizar e testar os endpoints da API através da interface Swagger.
+
+## Como executar o projeto
+
+1. **Instale as dependências:**
+   ```
+   npm i
+   ```
+2. **Suba o container Docker (banco de dados):**
+   ```
+   docker-compose up -d
+   ```
+3. **Execute as migrations do Prisma (gera tipagens e estrutura do banco):**
+   ```
+   npx prisma migrate dev
+   ```
+4. **Inicie a API em modo desenvolvimento:**
+   ```
+   npm run start:dev
+   ```
+
+#### Testes End-to-End (E2E)
+
+- **Rodar os testes em modo watch:**
+
+  ```
+  npm run test:e2e:watch
+  ```
+
+  > Antes de rodar os testes e2e, é obrigatório ter instalado todas as dependências (`npm i`) e executado `npx prisma migrate dev`.
+
+- **Rodar os testes apenas uma vez:**
+  ```
+  npm run test:e2e
+  ```
+
+#### Parar a aplicação
+
+- **Parar o banco de dados Docker (sem excluir dados):**
+
+  ```
+  docker-compose stop
+  ```
+
+- **Deletar tudo, incluindo dados das tabelas:**
+  ```
+  docker-compose down -v
+  ```
+
+#### Visualização do banco de dados em tempo real
+
+Com a API rodando (`npm run start:dev`), abra um novo terminal no mesmo diretório e execute:
+
 ```
 npx prisma studio
 ```
-Nessa interface, você poderá ver, apagar, editar ou criar os dados na tabela a desejar.
-## Observação:
-Criar um .env exatamente igual ao .env.example para conseguir rodar tudo.
-## Tasks
-1. [x] login(email, senha) gerando token jwt em um cookie<br>
-2. [x] cadastrar(email único, username único, senha) - senha deve ser encriptada, email e username nao podem ja existir.<br>
-3. [x] minhas informações, retorna informação do usuário logado a partir do jwt.<br>
-## Colaboradores
-1. Arthur Tosi
-2. Pedro Sodré Malini
-3. Theo Matheo
+
+Você poderá visualizar, editar, apagar e criar dados nas tabelas do banco através da interface web do Prisma Studio.
+
+#### Observação importante
+
+- Crie um arquivo `.env` exatamente igual ao `.env.example` para que tudo funcione corretamente.
+
+```bash
+  DATABASE_URL=""
+  JWT_PRIVATE_KEY=""
+  JWT_PUBLIC_KEY=""
+
+  R2_ACCOUNT_ID=""
+  R2_BUCKET_NAME=""
+  R2_ACCESS_KEY_ID=""
+  R2_SECRET_ACCESS_KEY=""
+  R2_PUBLIC_URL=""
+
+  CLOUDFLARE_TOKEN=""
+```
