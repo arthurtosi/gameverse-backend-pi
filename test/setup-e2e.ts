@@ -1,5 +1,4 @@
 import "dotenv/config";
-
 import { PrismaClient } from "@prisma/client";
 import { randomUUID } from "node:crypto";
 import { execSync } from "node:child_process";

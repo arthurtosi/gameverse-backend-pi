@@ -15,7 +15,7 @@ import { UserPayload } from "src/auth/jwt.strategy";
 const createGameListSchema = z.object({
   title: z.string().nonempty(),
   isPublic: z.boolean(),
-  games: z.array(z.string().uuid()).min(1, "Selecione ao menos um jogo."),
+  games: z.array(z.string().uuid()),
 });
 
 const bodyValidationPipe = new ZodValidationPipe(createGameListSchema);

@@ -49,6 +49,9 @@ import { GetGenreByIdController } from "./controllers/game-genre/get-genre-by-id
 import { GetAllGenresController } from "./controllers/game-genre/get-all-genres.controller";
 import { DeleteGameListByIdController } from "./controllers/game-list/delete-gamelist-by-id.controller";
 import { EditGameListByIdController } from "./controllers/game-list/edit-gamelist.controller";
+import { AddGameOnListController } from "./controllers/game-gameList/add-game-on-game-list.controller";
+import { AddGamesOnListController } from "./controllers/game-gameList/add-games-on-gamelist.controller";
+import { RemoveGameOnListController } from "./controllers/game-gameList/remove-game-from-gamelist.controller";
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -116,6 +119,11 @@ import { EditGameListByIdController } from "./controllers/game-list/edit-gamelis
     EditGenreByIdController,
     GetGenreByIdController,
     GetAllGenresController,
+
+    //Game-GameList
+    AddGameOnListController,
+    AddGamesOnListController,
+    RemoveGameOnListController,
   ],
   providers: [PrismaService, CloudflareR2Service],
 })
