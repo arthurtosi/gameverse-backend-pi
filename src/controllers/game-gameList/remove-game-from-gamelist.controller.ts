@@ -14,7 +14,7 @@ import { UserPayload } from "../../auth/jwt.strategy";
 
 @Controller("remove-game-on-gamelist/:gamelistId/:gameId")
 @UseGuards(JwtAuthGuard)
-export class AddGameOnListController {
+export class RemoveGameOnListController {
   constructor(private prisma: PrismaService) {}
 
   @Delete()
