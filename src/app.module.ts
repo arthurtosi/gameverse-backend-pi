@@ -52,6 +52,7 @@ import { EditGameListByIdController } from "./controllers/game-list/edit-gamelis
 import { AddGameOnListController } from "./controllers/game-gameList/add-game-on-game-list.controller";
 import { AddGamesOnListController } from "./controllers/game-gameList/add-games-on-gamelist.controller";
 import { RemoveGameOnListController } from "./controllers/game-gameList/remove-game-from-gamelist.controller";
+import { FollowController } from "./controllers/follow/follow.controller";
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -124,6 +125,9 @@ import { RemoveGameOnListController } from "./controllers/game-gameList/remove-g
     AddGameOnListController,
     AddGamesOnListController,
     RemoveGameOnListController,
+
+    // Follow
+    FollowController,
   ],
   providers: [PrismaService, CloudflareR2Service],
 })

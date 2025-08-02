@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
 
@@ -6,7 +7,7 @@ const prisma = new PrismaClient();
 async function main() {
   const passwordHash = await hash("123", 8);
 
-  const cliente = await prisma.user.upsert({
+  const cliente1 = await prisma.user.upsert({
     where: { email: "cliente@example.com" },
     update: {},
     create: {
@@ -18,8 +19,19 @@ async function main() {
     },
   });
 
+  const cliente2 = await prisma.user.upsert({
+    where: { email: "cliente2@example.com" },
+    update: {},
+    create: {
+      username: "cliente02",
+      email: "cliente2@example.com",
+      password: passwordHash,
+      role: "CLIENT",
+      bio: "Usuário cliente criado automaticamente pelo seed.",
+    },
+  });
+
   // Plataformas
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [pc, ps5, xbox, nintendoSwitch, mobile, mac, linux] = await Promise.all(
     [
       prisma.gamePlatform.upsert({
@@ -57,7 +69,7 @@ async function main() {
         update: {},
         create: { name: "Linux", slug: "linux" },
       }),
-    ]
+    ],
   );
 
   // Gêneros
@@ -132,7 +144,7 @@ async function main() {
     create: {
       name: "Elden Ring",
       slug: "elden-ring",
-      foto: "https://press-start.com.au/wp-content/uploads/2022/02/Elden-Ring-Reviewwww.jpg",
+      foto: "https://placehold.co/400",
       releaseDate: new Date("2022-02-25"),
     },
   });
@@ -143,7 +155,7 @@ async function main() {
     create: {
       name: "God of War Ragnarok",
       slug: "god-of-war-ragnarok",
-      foto: "https://upload.wikimedia.org/wikipedia/pt/thumb/a/a5/God_of_War_Ragnar%C3%B6k_capa.jpg/330px-God_of_War_Ragnar%C3%B6k_capa.jpg",
+      foto: "https://placehold.co/400",
       releaseDate: new Date("2022-11-09"),
     },
   });
@@ -154,7 +166,7 @@ async function main() {
     create: {
       name: "Halo Infinite",
       slug: "halo-infinite",
-      foto: "https://wallpapercave.com/wp/wp4813418.png",
+      foto: "https://placehold.co/400",
       releaseDate: new Date("2021-12-08"),
     },
   });
@@ -202,21 +214,21 @@ async function main() {
       title: "Obra-prima moderna",
       content: "Combina liberdade, desafio e ambientação como poucos jogos.",
       rate: 5,
-      authorId: cliente.id,
+      authorId: cliente1.id,
       gameId: game1.id,
     },
     {
       title: "Emocionante e épico",
       content: "História envolvente e gráficos incríveis.",
       rate: 5,
-      authorId: cliente.id,
+      authorId: cliente1.id,
       gameId: game2.id,
     },
     {
       title: "Multiplayer excelente",
       content: "A melhor experiência multiplayer da geração.",
       rate: 4,
-      authorId: cliente.id,
+      authorId: cliente2.id,
       gameId: game3.id,
     },
   ];
@@ -232,7 +244,7 @@ async function main() {
       title: "Favoritos do Cliente",
       description: "Minha lista pessoal de jogos favoritos",
       isPublic: true,
-      userId: cliente.id,
+      userId: cliente1.id,
     },
   });
 
