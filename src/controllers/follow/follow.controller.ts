@@ -119,4 +119,21 @@ export class FollowController {
     const followerUsers = followers.map((f) => f.follower);
     return followerUsers;
   }
+
+  @Get(":userId/status")
+  async checkIfFollowing(
+    @Param("userId") userId: string,
+    @CurrentUser() userPayload: UserPayload,
+  ) {
+    const { sub: followerId } = userPayload;
+
+    const follow = await this.prisma.follow.findFirst({
+      where: {
+        followerId,
+        followingId: userId,
+      },
+    });
+
+    return { isFollowing: !!follow };
+  }
 }
