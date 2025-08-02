@@ -98,27 +98,27 @@ async function main() {
     prisma.gameGenre.upsert({
       where: { slug: "adventure" },
       update: {},
-      create: { name: "Adventure", slug: "adventure" },
+      create: { name: "Aventura", slug: "adventure" },
     }),
     prisma.gameGenre.upsert({
       where: { slug: "shooter" },
       update: {},
-      create: { name: "Shooter", slug: "shooter" },
+      create: { name: "Tiro", slug: "shooter" },
     }),
     prisma.gameGenre.upsert({
       where: { slug: "strategy" },
       update: {},
-      create: { name: "Strategy", slug: "strategy" },
+      create: { name: "Estratégia", slug: "strategy" },
     }),
     prisma.gameGenre.upsert({
       where: { slug: "simulation" },
       update: {},
-      create: { name: "Simulation", slug: "simulation" },
+      create: { name: "Simulação", slug: "simulation" },
     }),
     prisma.gameGenre.upsert({
       where: { slug: "sports" },
       update: {},
-      create: { name: "Sports", slug: "sports" },
+      create: { name: "Esportes", slug: "sports" },
     }),
     prisma.gameGenre.upsert({
       where: { slug: "puzzle" },
@@ -128,12 +128,12 @@ async function main() {
     prisma.gameGenre.upsert({
       where: { slug: "horror" },
       update: {},
-      create: { name: "Horror", slug: "horror" },
+      create: { name: "Terror", slug: "horror" },
     }),
     prisma.gameGenre.upsert({
       where: { slug: "racing" },
       update: {},
-      create: { name: "Racing", slug: "racing" },
+      create: { name: "Corrida", slug: "racing" },
     }),
   ]);
 

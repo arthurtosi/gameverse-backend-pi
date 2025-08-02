@@ -55,6 +55,7 @@ import { RemoveGameOnListController } from "./controllers/game-gameList/remove-g
 import { FollowController } from "./controllers/follow/follow.controller";
 import { FeedController } from "./controllers/feed/feed.controller";
 import { GameStatusController } from "./controllers/game-status/game-status.controller";
+import { UserStatisticsController } from "./controllers/user-statistics/user-statistics.controller";
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -136,6 +137,9 @@ import { GameStatusController } from "./controllers/game-status/game-status.cont
 
     // GameStatus
     GameStatusController,
+
+    // Statistics
+    UserStatisticsController,
   ],
   providers: [PrismaService, CloudflareR2Service],
 })
