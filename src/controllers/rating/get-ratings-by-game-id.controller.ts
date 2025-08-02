@@ -16,7 +16,10 @@ export class GetRatingsByGameIdController {
       include: {
         user: {
           omit: {
-            password: false,
+            password: true,
+            email: true,
+            bio: true,
+            role: true,
           },
         },
       },

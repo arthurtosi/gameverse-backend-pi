@@ -16,8 +16,19 @@ export class GetGameBySlugController {
   @Get()
   async handle(@Param("slug") slug: string) {
     const game = await this.prisma.game.findUnique({
-      where: {
-        slug,
+      where: { slug },
+      include: {
+        ratings: true,
+        RelationGameAndGameGenre: {
+          include: {
+            gameGenre: true,
+          },
+        },
+        RelationGameAndGamePlatform: {
+          include: {
+            gamePlatform: true,
+          },
+        },
       },
     });
 
@@ -25,6 +36,16 @@ export class GetGameBySlugController {
       throw new NotFoundException("Jogo não encontrado.");
     }
 
-    return game;
+    const averageRating =
+      game.ratings.length > 0
+        ? game.ratings.reduce((sum, rating) => sum + rating.rate, 0) /
+          game.ratings.length
+        : 0;
+
+    return {
+      ...game,
+      averageRating: Math.round(averageRating * 100) / 100,
+      totalRatings: game.ratings.length,
+    };
   }
 }
