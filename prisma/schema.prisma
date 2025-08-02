@@ -25,7 +25,23 @@ model User {
   gamelists GameList[]
   comments  Comment[]
 
+  following Follow[] @relation("Following")
+  followers Follow[] @relation("Followers")
+
   @@map("user")
+}
+
+model Follow {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  followerId String
+  follower   User   @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+
+  followingId String
+  following   User   @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
 }
 
 model Game {
