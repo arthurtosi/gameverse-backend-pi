@@ -53,6 +53,7 @@ import { AddGameOnListController } from "./controllers/game-gameList/add-game-on
 import { AddGamesOnListController } from "./controllers/game-gameList/add-games-on-gamelist.controller";
 import { RemoveGameOnListController } from "./controllers/game-gameList/remove-game-from-gamelist.controller";
 import { FollowController } from "./controllers/follow/follow.controller";
+import { FeedController } from "./controllers/feed/feed.controller";
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -128,6 +129,9 @@ import { FollowController } from "./controllers/follow/follow.controller";
 
     // Follow
     FollowController,
+
+    // FeedController
+    FeedController,
   ],
   providers: [PrismaService, CloudflareR2Service],
 })
