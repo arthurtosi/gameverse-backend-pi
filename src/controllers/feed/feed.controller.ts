@@ -8,46 +8,45 @@ import { UserPayload } from "../../auth/jwt.strategy";
 @UseGuards(JwtAuthGuard)
 export class FeedController {
   constructor(private prisma: PrismaService) {}
+
   @Get()
-  @UseGuards(JwtAuthGuard)
   async getUserFeed(@CurrentUser() userPayload: UserPayload) {
     const { sub: userId } = userPayload;
 
     const follows = await this.prisma.follow.findMany({
       where: { followerId: userId },
-      select: {
-        followingId: true,
-      },
+      select: { followingId: true },
     });
 
     const followingIds = follows.map((f) => f.followingId);
 
-    // Reviews feitas pelos usuarios que ele segue
+    // Avaliações
     const ratings = await this.prisma.rating.findMany({
-      where: {
-        authorId: { in: followingIds },
-      },
+      where: { authorId: { in: followingIds } },
       include: {
-        user: {
-          select: { id: true, username: true, foto: true },
-        },
-        game: {
-          select: { id: true, name: true },
-        },
+        user: { select: { id: true, username: true, foto: true } },
+        game: { select: { id: true, name: true } },
       },
       orderBy: { createdAt: "desc" },
     });
 
+    // Listas
     const lists = await this.prisma.gameList.findMany({
-      where: {
-        userId: { in: followingIds },
-      },
+      where: { userId: { in: followingIds } },
       include: {
-        user: {
-          select: { id: true, username: true, foto: true },
-        },
+        user: { select: { id: true, username: true, foto: true } },
       },
       orderBy: { createdAt: "desc" },
+    });
+
+    // Atualizações de status
+    const statuses = await this.prisma.userGameStatus.findMany({
+      where: { userId: { in: followingIds } },
+      include: {
+        user: { select: { id: true, username: true, foto: true } },
+        game: { select: { id: true, name: true } },
+      },
+      orderBy: { updatedAt: "desc" },
     });
 
     const activities = [
@@ -73,9 +72,19 @@ export class FeedController {
           name: l.title,
         },
       })),
+      ...statuses.map((s) => ({
+        id: s.id,
+        type: "game_status_update",
+        createdAt: s.updatedAt,
+        user: s.user,
+        contentSnippet: s.status, // exemplo: "PLAYING"
+        targetGame: {
+          id: s.game.id,
+          title: s.game.name,
+        },
+      })),
     ];
 
-    // Ordena por data mais recente
     activities.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
     return activities;

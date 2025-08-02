@@ -28,6 +28,8 @@ model User {
   following Follow[] @relation("Following")
   followers Follow[] @relation("Followers")
 
+  userGameStatus UserGameStatus[]
+
   @@map("user")
 }
 
@@ -55,6 +57,7 @@ model Game {
   relationGameAndGameList     RelationGameAndGameList[]
   RelationGameAndGameGenre    RelationGameAndGameGenre[]
   RelationGameAndGamePlatform RelationGameAndGamePlatform[]
+  userGameStatus UserGameStatus[]
 
   @@map("game")
 }
@@ -144,4 +147,25 @@ model RelationGameAndGamePlatform {
   gameId         String
   gamePlatform   GamePlatform @relation(fields: [gamePlatformId], references: [id], onDelete: Cascade)
   gamePlatformId String
+}
+
+enum GameStatusEnum {
+  PLAYING
+  COMPLETED
+  ON_HOLD
+  DROPPED
+  WISH_LIST
+}
+
+model UserGameStatus {
+  id        String      @id @default(cuid())
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String
+  game      Game        @relation(fields: [gameId], references: [id])
+  gameId    String
+  status    GameStatusEnum
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@unique([userId, gameId])
 }
