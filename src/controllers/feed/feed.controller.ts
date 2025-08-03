@@ -7,7 +7,7 @@ import { UserPayload } from "../../auth/jwt.strategy";
 @Controller("/feed")
 @UseGuards(JwtAuthGuard)
 export class FeedController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   @Get()
   async getUserFeed(@CurrentUser() userPayload: UserPayload) {
@@ -32,7 +32,10 @@ export class FeedController {
 
     // Listas
     const lists = await this.prisma.gameList.findMany({
-      where: { userId: { in: followingIds } },
+      where: {
+        userId: { in: followingIds },
+        isPublic: true,
+      },
       include: {
         user: { select: { id: true, username: true, foto: true } },
       },
