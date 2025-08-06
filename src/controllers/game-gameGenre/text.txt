@@ -1,1 +1,0 @@
-Trabalhar relações many to many entre jogos e gêneros de jogos.
