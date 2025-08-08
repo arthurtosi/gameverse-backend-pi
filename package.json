@@ -19,7 +19,7 @@
     "test:debug": "vitest --inspect-brk --inspect --logHeapUsage --threads=false",
     "test:e2e": "vitest run --config ./vitest.config.e2e.mts",
     "test:e2e:watch": "vitest --config ./vitest.config.e2e.mts",
-    "seed": "ts-node prisma/seed.ts",
+    "seed": "npx prisma db seed",
     "migrate": "prisma migrate deploy",
     "deploy": "npm run build && npm run migrate && npm run seed && node dist/src/main.js"
   },
